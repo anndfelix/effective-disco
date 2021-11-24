@@ -1,31 +1,32 @@
 package interfaz;
 
-import Excepcion.DAOException;
+import Exception.DAOException;
 import control.Control;
 import java.time.LocalDate;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import objetosNegocio.Sexo;
-import objetosNegocio.Usuario;
-import DAO.UsuarioDAO;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import objectosNegocio.Sexo;
+import objectosNegocio.Usuario;
+import servidorfb.Cliente;
+import servidorfb.Servidor;
 
 public class RegistrarseDlg extends javax.swing.JDialog {
 
-    
-
     Control control = new Control();
-    UsuarioDAO udao = new UsuarioDAO();    
     static Usuario usuario;
-    
-    
+    public static Usuario u;
+    Cliente cliente = new Cliente();
 
-    public RegistrarseDlg() {
+    public RegistrarseDlg() throws DAOException {
 
         initComponents();
         setLocationRelativeTo(null);
         TextoPreliminar();
         llenarComboboxSexoUsuario(comboSexo);
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -132,11 +133,11 @@ public class RegistrarseDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonCuentaNuevaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCuentaNuevaActionPerformed
+
         agregarUsuario();
         InicioDlg inicio = new InicioDlg();
         inicio.setVisible(true);
-        System.out.println(udao.lista());
-        
+
     }//GEN-LAST:event_botonCuentaNuevaActionPerformed
 
     private void txtNombreCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtNombreCaretUpdate
@@ -161,26 +162,23 @@ public class RegistrarseDlg extends javax.swing.JDialog {
     }
 
     private void llenarComboboxSexoUsuario(JComboBox comboBox) throws DAOException {
-        control.llenarComboboxSexoUsuario(comboSexo);
+
     }
 
-    private void agregarUsuario() {
-        String nombre = this.txtNombre.getText();
-        String celular = this.txtCelular.getText();
-        String email = this.txtEmail.getText();
-        String contraseña = this.txtContraseña.getText();
-        Sexo sexoUsuario = (Sexo) this.comboSexo.getSelectedItem();
-        LocalDate fechaNacimiento = txtFechaNacimiento.getDate();
-        int edad = 2021 - txtFechaNacimiento.getDate().getYear();
-        usuario = new Usuario(nombre, email, celular, contraseña, sexoUsuario, fechaNacimiento, edad);
+    private void agregarUsuario(){
+//        String nombre = this.txtNombre.getText();
+//        String celular = this.txtCelular.getText();
+//        String email = this.txtEmail.getText();
+//        String contraseña = this.txtContraseña.getText();
+//        Sexo sexoUsuario = (Sexo) this.comboSexo.getSelectedItem();
+//        String fechaNacimiento = txtFechaNacimiento.getDate().toString();
+//        int edad = 2021 - txtFechaNacimiento.getDate().getYear();
+//
+//        usuario = new Usuario(nombre, email, Sexo.H, celular, contraseña, edad, new Date(fechaNacimiento));
+//        u = usuario;
 
-        try {
-            udao.agrega(usuario);
-        } catch (DAOException ex) {
-            System.out.println(ex.getMessage());
-            JOptionPane.showMessageDialog(this, "Datos incorrectos",
-                    "Error de agregar", JOptionPane.ERROR_MESSAGE);
-        }
+        cliente.main(null);
+
     }
 
 

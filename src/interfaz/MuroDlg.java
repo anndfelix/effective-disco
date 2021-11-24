@@ -1,34 +1,17 @@
 package interfaz;
 
-import DAO.PublicacionDAO;
-import Excepcion.DAOException;
+
 import control.Control;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
-import objetosNegocio.Usuario;
-import DAO.UsuarioDAO;
-import java.time.LocalDateTime;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import objetosNegocio.Publicacion;
 import java.net.*;
 import java.io.*;
 import java.awt.event.*;
-import objetosNegocio.Chat;
+import javax.swing.JComboBox;
+import objectosNegocio.Usuario;
+
 
 public class MuroDlg extends javax.swing.JDialog {
 
     Control control = new Control();
-    UsuarioDAO udao = new UsuarioDAO();
-    PublicacionDAO pdao = new PublicacionDAO();
-    public static Usuario usuario = InicioDlg.usuario;
-    static Publicacion publicacionBuscada;
     ServerSocket servidor = null;
     Socket socket = null;
     BufferedReader lector = null;
@@ -42,11 +25,7 @@ public class MuroDlg extends javax.swing.JDialog {
 
         llenarComboboxUsuarios(comboUsuarios);
 
-        try {
-            publicaciones();
-        } catch (BadLocationException ex) {
-            Logger.getLogger(MuroDlg.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
 
     @SuppressWarnings("unchecked")
@@ -390,7 +369,6 @@ public class MuroDlg extends javax.swing.JDialog {
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
         panelBusqueda.setVisible(true);
-        tablaPublicaciones();
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void botonNotificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNotificacionesActionPerformed
@@ -410,7 +388,6 @@ public class MuroDlg extends javax.swing.JDialog {
     private void botonPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPerfilActionPerformed
         PerfilDlg perfil = new PerfilDlg();
         perfil.setVisible(true);
-        perfil.mostrar();
     }//GEN-LAST:event_botonPerfilActionPerformed
 
     private void botonCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCerrarSesionActionPerformed
@@ -427,8 +404,6 @@ public class MuroDlg extends javax.swing.JDialog {
     private void tablaPublicacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPublicacionesMouseClicked
 
         int fila = tablaPublicaciones.getSelectedRow();
-        publicacionBuscada = (Publicacion) tablaPublicaciones.getValueAt(fila, 0);
-
         PublicacionDlg publicacion = new PublicacionDlg();
         publicacion.setVisible(true);
     }//GEN-LAST:event_tablaPublicacionesMouseClicked
@@ -448,12 +423,7 @@ public class MuroDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_botonEnviarActionPerformed
 
     private void botonPublicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPublicarActionPerformed
-        agregarPublicacion();
-        try {
-            publicaciones();
-        } catch (BadLocationException ex) {
-            Logger.getLogger(MuroDlg.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }//GEN-LAST:event_botonPublicarActionPerformed
 
     private void botonEtiquetarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEtiquetarActionPerformed
@@ -482,68 +452,52 @@ public class MuroDlg extends javax.swing.JDialog {
         panelBusqueda.setVisible(false);
     }
 
-    private void publicaciones() throws BadLocationException {
+//    private void publicaciones() throws BadLocationException {
+//
+//        ArrayList<String> publicaciones = control.listaPublicacionesString();
+//        jTextPane1.setText("");
+//
+//        StyledDocument doc = jTextPane1.getStyledDocument();
+//
+//        for (String p : publicaciones) {
+//            doc.insertString(doc.getLength(), p, null);
+//            jTextPane1.setCaretPosition(jTextPane1.getDocument().getLength());
+//            jTextPane1.insertComponent(new JButton("Comentar"));
+//            jTextPane1.insertComponent(new JButton("Eliminar"));
+//            doc.insertString(doc.getLength(), "\n", null);
+//        }
+//
+//        jTextPane1.setEditable(false);
+//    }
 
-        ArrayList<String> publicaciones = control.listaPublicacionesString();
-        jTextPane1.setText("");
-
-        StyledDocument doc = jTextPane1.getStyledDocument();
-
-        for (String p : publicaciones) {
-            doc.insertString(doc.getLength(), p, null);
-            jTextPane1.setCaretPosition(jTextPane1.getDocument().getLength());
-            jTextPane1.insertComponent(new JButton("Comentar"));
-            jTextPane1.insertComponent(new JButton("Eliminar"));
-            doc.insertString(doc.getLength(), "\n", null);
-        }
-
-        jTextPane1.setEditable(false);
-    }
-
-    private void llenarComboboxUsuarios(JComboBox comboBox) throws DAOException {
-        control.llenarComboboxUsuarios(comboUsuarios);
+    private void llenarComboboxUsuarios(JComboBox comboBox){
+       
     }
 
     private void agregarPublicacion() {
 
-        List<Usuario> usuariosEtiquetados = control.listaEtiquetados();
-        LocalDateTime fechaHoraCreacion = LocalDateTime.now();
-        usuario = InicioDlg.usuario;
-        String contenido = txtPublicacion.getText();
-        List<String> etiquetas = control.listaEtiquetas(contenido);
-
-        Publicacion p = new Publicacion(contenido, usuario, fechaHoraCreacion, etiquetas, usuariosEtiquetados);
-
-        try {
-            pdao.agrega(p);
-        } catch (DAOException ex) {
-            System.out.println(ex.getMessage());
-            JOptionPane.showMessageDialog(this, "Datos incorrectos",
-                    "Error de agregar", JOptionPane.ERROR_MESSAGE);
-        }
-
-        if (checkNotificar.isSelected()) {
-            control.notificarEtiquetas();
-        }
-
-        txtPublicacion.setText("");
-        checkNotificar.setSelected(false);
-    }
-
-    private void tablaPublicaciones() throws DAOException {
-        List<Publicacion> listaPublicaciones = control.listaPublicacionesBuscadas(txtBusqueda.getText());
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaPublicaciones.getModel();
-        modeloTabla.setRowCount(0);
-
-        for (Publicacion publicacion : listaPublicaciones) {
-
-            Object[] filaDatos = new Object[1];
-
-            filaDatos[0] = publicacion;
-
-            modeloTabla.addRow(filaDatos);
-        }
-
+//        List<Usuario> usuariosEtiquetados = control.listaEtiquetados();
+//        LocalDateTime fechaHoraCreacion = LocalDateTime.now();
+//        usuario = InicioDlg.usuario;
+//        String contenido = txtPublicacion.getText();
+//        List<String> etiquetas = control.listaEtiquetas(contenido);
+//
+//        Publicacion p = new Publicacion(contenido, usuario, fechaHoraCreacion, etiquetas, usuariosEtiquetados);
+//
+//        try {
+//            pdao.agrega(p);
+//        } catch (DAOException ex) {
+//            System.out.println(ex.getMessage());
+//            JOptionPane.showMessageDialog(this, "Datos incorrectos",
+//                    "Error de agregar", JOptionPane.ERROR_MESSAGE);
+//        }
+//
+//        if (checkNotificar.isSelected()) {
+//            control.notificarEtiquetas();
+//        }
+//
+//        txtPublicacion.setText("");
+//        checkNotificar.setSelected(false);
     }
 
     // Metodos de Chat para implementar con sockets.

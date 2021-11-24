@@ -1,13 +1,12 @@
 package interfaz;
 
-import objetosNegocio.Publicacion;
+
 
 public class PublicacionDlg extends javax.swing.JDialog {
 
     public PublicacionDlg() {
         initComponents();
         setLocationRelativeTo(null);
-        publicacion();
     }
 
     @SuppressWarnings("unchecked")
@@ -123,15 +122,7 @@ public class PublicacionDlg extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_botonVolverActionPerformed
 
-    public void publicacion() {
 
-        Publicacion publicacion = MuroDlg.publicacionBuscada;
-
-        txtUsuario.setText(publicacion.getUsuarioCreador().toString());
-        txtContenido.setText(publicacion.getContenido());
-        txtFechaHora.setText(publicacion.getFechaHoraCreacion().toString());
-
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonVolver;
     private javax.swing.JLabel jLabel1;

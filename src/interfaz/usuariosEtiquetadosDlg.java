@@ -5,14 +5,17 @@
  */
 package interfaz;
 
-import DAO.UsuarioDAO;
-import Excepcion.DAOException;
+
+import Exception.DAOException;
 import control.Control;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
-import objetosNegocio.Publicacion;
-import objetosNegocio.Usuario;
+import objectosNegocio.Usuario;
+
+
 
 /**
  *
@@ -21,13 +24,11 @@ import objetosNegocio.Usuario;
 public class usuariosEtiquetadosDlg extends javax.swing.JDialog {
 
     Control control = new Control();
-    UsuarioDAO udao = new UsuarioDAO();
+
 
     public usuariosEtiquetadosDlg() {
         initComponents();
         setLocationRelativeTo(null);
-        llenarComboboxUsuarios(comboUsuarios);
-        tablaUsuarios();
     }
 
     /**
@@ -166,55 +167,14 @@ public class usuariosEtiquetadosDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_botonVolverActionPerformed
 
     private void botonEtiquetarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEtiquetarActionPerformed
-        agregarEtiquetados();
+
     }//GEN-LAST:event_botonEtiquetarActionPerformed
 
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
-        int fila = tablaUsuarios.getSelectedRow();
 
-        Usuario usuarioEliminar = (Usuario) tablaUsuarios.getValueAt(fila, 0);
-
-        control.eliminarUsuariosEtiquetados(usuarioEliminar);
-
-        tablaUsuarios();
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
     private void llenarComboboxUsuarios(JComboBox comboBox) throws DAOException {
-        control.llenarComboboxUsuarios(comboUsuarios);
-    }
-
-    private void tablaUsuarios() throws DAOException {
-        List<Usuario> usuariosEtiquetados = control.listaEtiquetados();
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaUsuarios.getModel();
-        modeloTabla.setRowCount(0);
-
-        for (Usuario usuario : usuariosEtiquetados) {
-
-            Object[] filaDatos = new Object[1];
-
-            filaDatos[0] = usuario;
-
-            modeloTabla.addRow(filaDatos);
-        }
-
-    }
-
-    public void agregarEtiquetados() {
-
-        Usuario etiquetado = (Usuario) comboUsuarios.getSelectedItem();
-        List<Usuario> usuariosEtiquetados = control.etiquetarUsuarios(etiquetado);
-
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaUsuarios.getModel();
-        modeloTabla.setRowCount(0);
-
-        for (Usuario usuario : usuariosEtiquetados) {
-
-            Object[] filaDatos = new Object[1];
-
-            filaDatos[0] = usuario;
-
-            modeloTabla.addRow(filaDatos);
-        }
 
     }
 

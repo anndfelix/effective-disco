@@ -5,11 +5,9 @@
  */
 package interfaz;
 
-import Excepcion.DAOException;
 import control.Control;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import objetosNegocio.Notificacion;
 
 /**
  *
@@ -147,19 +145,7 @@ public class NotificacionesDlg extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_botonVolverActionPerformed
 
-    private void tablaNotificaciones() throws DAOException {
-        List<Notificacion> listaPublicaciones = control.notificaciones;
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaNotificaciones.getModel();
-        modeloTabla.setRowCount(0);
-
-        for (Notificacion notificacion : listaPublicaciones) {
-
-            Object[] filaDatos = new Object[1];
-
-            filaDatos[0] = notificacion.getAsunto();
-
-            modeloTabla.addRow(filaDatos);
-        }
+    private void tablaNotificaciones() {
 
     }
 

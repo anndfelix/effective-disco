@@ -1,55 +1,27 @@
-
 package interfaz;
 
-import Excepcion.DAOException;
-
-import java.time.LocalDate;
-import java.util.Date;
+import Exception.DAOException;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import objetosNegocio.Sexo;
-import objetosNegocio.Usuario;
 import control.Control;
+import objectosNegocio.Sexo;
+import objectosNegocio.Usuario;
+
 
 public class PerfilDlg extends javax.swing.JDialog {
-
+    
     static Usuario usuario = InicioDlg.usuario;
     Control control = new Control();
-
+    
     public PerfilDlg() {
         initComponents();
         setLocationRelativeTo(null);
-        llenarComboboxSexoUsuario(comboSexo);
     }
-
+    
     public void llenarComboboxSexoUsuario(JComboBox comboBox) throws DAOException {
-        control.llenarComboboxSexoUsuario(comboSexo);
-    }
-
-    public void mostrar() {
-
-        this.txtNombreCompleto.setText(usuario.getNombre());
-        this.txtCelular.setText(usuario.getNumeroCelular());
-        this.txtEmail.setText(usuario.getEmail());
-        this.txtEdad.setText(String.valueOf(usuario.getEdad()));
-        this.fechaNacimiento.setDate(usuario.getFechaNacimiento());
-       this.comboSexo.getModel().setSelectedItem(usuario.getSexo());
         
-        
-        System.out.println(usuario.getNombre());
-        System.out.println(usuario.getEmail());
     }
-  public void actualizar(){
-       LocalDate fechaN=this.fechaNacimiento.getDate();
-      usuario.setNombre(this.txtNombreCompleto.getText());
-      usuario.setFechaNacimiento(fechaN);
-      usuario.setSexo((Sexo) this.comboSexo.getModel().getSelectedItem());     
-      int edad = 2021 - fechaNacimiento.getDate().getYear();
-      usuario.setEdad(edad);
-      
-        dispose();
-   }
-
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -280,15 +252,14 @@ public class PerfilDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEdadActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    this.actualizar();
-    
+
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void comboSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSexoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboSexoActionPerformed
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonVolver;

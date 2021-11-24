@@ -6,11 +6,12 @@
 package interfaz;
 
 import control.Control;
-import javax.swing.JOptionPane;
-import DAO.UsuarioDAO;
+import Exception.DAOException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import objetosNegocio.Usuario;
+import objectosNegocio.Usuario;
+import servidorfb.Servidor;
 
 /**
  *
@@ -19,8 +20,8 @@ import objetosNegocio.Usuario;
 public class InicioDlg extends javax.swing.JFrame {
 
     Control control = new Control();
-    UsuarioDAO udao = new UsuarioDAO();
     static Usuario usuario;
+    static Servidor servidor = new Servidor();
 
     /**
      * Creates new form InicioDlg
@@ -138,28 +139,17 @@ public class InicioDlg extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonCuentaNuevaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCuentaNuevaActionPerformed
-        RegistrarseDlg registro = new RegistrarseDlg();
-        registro.setVisible(true);
+        try {
+            RegistrarseDlg registro = new RegistrarseDlg();
+            registro.setVisible(true);
+        } catch (DAOException ex) {
+            Logger.getLogger(InicioDlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_botonCuentaNuevaActionPerformed
 
     private void botonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIniciarSesionActionPerformed
 
-        try {
-            if (control.confirmarUsuario(txtEmail.getText(), txtContraseña.getText()) != null) {
-                MuroDlg muro = new MuroDlg();
-                muro.setVisible(true);
-                usuario = control.confirmarUsuario(txtEmail.getText(), txtContraseña.getText());
-                if (muro.isVisible()) {
-                    dispose();
-                    System.out.println();
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Datos incorrectos",
-                        "Error de inicio de sesion", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
+
     }//GEN-LAST:event_botonIniciarSesionActionPerformed
 
     private void botonGoogleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGoogleActionPerformed
@@ -187,7 +177,7 @@ public class InicioDlg extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws DAOException, ParseException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -210,11 +200,13 @@ public class InicioDlg extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(InicioDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        Servidor.main(null);
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+
                 new InicioDlg().setVisible(true);
+
             }
         });
 
